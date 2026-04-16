@@ -1,0 +1,164 @@
+import java.util.*;
+
+public class Main {
+
+    static class Student {
+        int id;
+        String name;
+        int presentDays = 0;
+        int totalDays = 0;
+
+        Student(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        double getPercentage() {
+            if (totalDays == 0) return 0;
+            return (presentDays * 100.0) / totalDays;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+        int choice = 0;
+
+        while (choice != 8) {
+
+            System.out.println("\n===== STUDENT ATTENDANCE SYSTEM =====");
+            System.out.println("1. Add Student");
+            System.out.println("2. View Students");
+            System.out.println("3. Mark Attendance");
+            System.out.println("4. View Report");
+            System.out.println("5. Search Student");
+            System.out.println("6. Update Student Name");
+            System.out.println("7. Delete Student");
+            System.out.println("8. Exit");
+            System.out.print("Enter choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+
+                    students.add(new Student(id, name));
+                    System.out.println("Student Added!");
+                    break;
+
+                case 2:
+                    if (students.isEmpty()) {
+                        System.out.println("No students found.");
+                    } else {
+                        for (Student s : students) {
+                            System.out.println("ID: " + s.id + " | Name: " + s.name);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    if (students.isEmpty()) {
+                        System.out.println("No students available.");
+                    } else {
+                        for (Student s : students) {
+                            System.out.print("Is " + s.name + " present? (yes/no): ");
+                            String ans = sc.next();
+
+                            s.totalDays++;
+
+                            if (ans.equalsIgnoreCase("yes")) {
+                                s.presentDays++;
+                            }
+                        }
+                        System.out.println("Attendance Marked!");
+                    }
+                    break;
+
+                case 4:
+                    if (students.isEmpty()) {
+                        System.out.println("No records found.");
+                    } else {
+                        for (Student s : students) {
+                            System.out.printf("ID: %d | Name: %s | Present: %d | Total: %d | %.2f%%\n",
+                                    s.id, s.name, s.presentDays, s.totalDays, s.getPercentage());
+                        }
+                    }
+                    break;
+
+                case 5:
+                    System.out.print("Enter Student ID to Search: ");
+                    int sid = sc.nextInt();
+                    boolean found = false;
+
+                    for (Student s : students) {
+                        if (s.id == sid) {
+                            System.out.println("Found -> ID: " + s.id + " | Name: " + s.name);
+                            found = true;
+                        }
+                    }
+
+                    if (!found) {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+
+                case 6:
+                    System.out.print("Enter Student ID to Update: ");
+                    int uid = sc.nextInt();
+                    sc.nextLine();
+                    found = false;
+
+                    for (Student s : students) {
+                        if (s.id == uid) {
+                            System.out.print("Enter New Name: ");
+                            s.name = sc.nextLine();
+                            System.out.println("Updated Successfully!");
+                            found = true;
+                        }
+                    }
+
+                    if (!found) {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+
+                case 7:
+                    System.out.print("Enter Student ID to Delete: ");
+                    int did = sc.nextInt();
+                    found = false;
+
+                    Iterator<Student> it = students.iterator();
+
+                    while (it.hasNext()) {
+                        Student s = it.next();
+                        if (s.id == did) {
+                            it.remove();
+                            found = true;
+                            System.out.println("Student Deleted!");
+                        }
+                    }
+
+                    if (!found) {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+
+                case 8:
+                    System.out.println("Thank You!");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+        }
+
+        sc.close();
+    }
+}
