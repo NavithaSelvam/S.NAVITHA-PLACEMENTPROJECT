@@ -1,0 +1,175 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+
+    static class Product {
+        int id;
+        String name;
+        double price;
+        int stock;
+
+        Product(int id, String name, double price, int stock) {
+            this.id = id;
+            this.name = name;
+            this.price = price;
+            this.stock = stock;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Product> products = new ArrayList<>();
+
+        int choice = 0;
+
+        while (choice != 6) {
+
+            System.out.println("\n===== SMART SHOP BILLING + INVENTORY SYSTEM =====");
+            System.out.println("1. Add Product");
+            System.out.println("2. View Products");
+            System.out.println("3. Billing");
+            System.out.println("4. Update Stock");
+            System.out.println("5. Search Product");
+            System.out.println("6. Exit");
+            System.out.print("Enter Choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter Product ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Product Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Price: ");
+                    double price = sc.nextDouble();
+
+                    System.out.print("Enter Stock Quantity: ");
+                    int stock = sc.nextInt();
+
+                    products.add(new Product(id, name, price, stock));
+                    System.out.println("Product Added Successfully!");
+                    break;
+
+                case 2:
+                    if (products.isEmpty()) {
+                        System.out.println("No Products Available.");
+                    } else {
+                        System.out.println("\n--- Product List ---");
+                        for (Product p : products) {
+                            System.out.println("ID: " + p.id +
+                                    " | Name: " + p.name +
+                                    " | Price: " + p.price +
+                                    " | Stock: " + p.stock);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    if (products.isEmpty()) {
+                        System.out.println("No Products Available.");
+                    } else {
+                        System.out.print("Enter Product ID to Buy: ");
+                        int pid = sc.nextInt();
+
+                        boolean found = false;
+
+                        for (Product p : products) {
+                            if (p.id == pid) {
+                                found = true;
+
+                                System.out.print("Enter Quantity: ");
+                                int qty = sc.nextInt();
+
+                                if (qty <= p.stock) {
+
+                                    double total = qty * p.price;
+                                    double discount = 0;
+
+                                    if (total >= 1000) {
+                                        discount = total * 0.10; // 10%
+                                    }
+
+                                    double finalBill = total - discount;
+                                    p.stock -= qty;
+
+                                    System.out.println("\n===== BILL =====");
+                                    System.out.println("Product: " + p.name);
+                                    System.out.println("Price: " + p.price);
+                                    System.out.println("Quantity: " + qty);
+                                    System.out.println("Total: " + total);
+                                    System.out.println("Discount: " + discount);
+                                    System.out.println("Final Bill: " + finalBill);
+                                    System.out.println("Remaining Stock: " + p.stock);
+
+                                } else {
+                                    System.out.println("Insufficient Stock!");
+                                }
+                            }
+                        }
+
+                        if (!found) {
+                            System.out.println("Product Not Found!");
+                        }
+                    }
+                    break;
+
+                case 4:
+                    System.out.print("Enter Product ID: ");
+                    int upid = sc.nextInt();
+
+                    boolean updated = false;
+
+                    for (Product p : products) {
+                        if (p.id == upid) {
+                            System.out.print("Enter New Stock Quantity: ");
+                            p.stock = sc.nextInt();
+                            updated = true;
+                            System.out.println("Stock Updated!");
+                        }
+                    }
+
+                    if (!updated) {
+                        System.out.println("Product Not Found!");
+                    }
+                    break;
+
+                case 5:
+                    System.out.print("Enter Product ID to Search: ");
+                    int sid = sc.nextInt();
+
+                    boolean search = false;
+
+                    for (Product p : products) {
+                        if (p.id == sid) {
+                            System.out.println("Found -> ID: " + p.id +
+                                    " | Name: " + p.name +
+                                    " | Price: " + p.price +
+                                    " | Stock: " + p.stock);
+                            search = true;
+                        }
+                    }
+
+                    if (!search) {
+                        System.out.println("Product Not Found!");
+                    }
+                    break;
+
+                case 6:
+                    System.out.println("Thank You!");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+        }
+
+        sc.close();
+    }
+}
