@@ -1,0 +1,157 @@
+import java.io.*;
+import java.util.Scanner;
+
+class Book {
+    int id;
+    String name;
+    boolean issued;
+
+    Book(int id, String name, boolean issued) {
+        this.id = id;
+        this.name = name;
+        this.issued = issued;
+    }
+}
+
+public class LibraryManagementSystem {
+    static Scanner sc = new Scanner(System.in);
+    static Book[] books = new Book[100];
+    static int count = 0;
+    static String fileName = "books.txt";
+
+    public static void main(String[] args) {
+        loadBooks();
+
+        int choice;
+        do {
+            System.out.println("\n===== LIBRARY MANAGEMENT SYSTEM =====");
+            System.out.println("1. Add Book");
+            System.out.println("2. Issue Book");
+            System.out.println("3. Return Book");
+            System.out.println("4. View Books");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addBook();
+                    break;
+                case 2:
+                    issueBook();
+                    break;
+                case 3:
+                    returnBook();
+                    break;
+                case 4:
+                    viewBooks();
+                    break;
+                case 5:
+                    saveBooks();
+                    System.out.println("Data Saved. Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+
+        } while (choice != 5);
+    }
+
+    static void addBook() {
+        System.out.print("Enter Book ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter Book Name: ");
+        String name = sc.nextLine();
+
+        books[count] = new Book(id, name, false);
+        count++;
+
+        System.out.println("Book Added Successfully!");
+    }
+
+    static void issueBook() {
+        System.out.print("Enter Book ID to Issue: ");
+        int id = sc.nextInt();
+
+        for (int i = 0; i < count; i++) {
+            if (books[i].id == id) {
+                if (!books[i].issued) {
+                    books[i].issued = true;
+                    System.out.println("Book Issued Successfully!");
+                } else {
+                    System.out.println("Book Already Issued.");
+                }
+                return;
+            }
+        }
+
+        System.out.println("Book Not Found.");
+    }
+
+    static void returnBook() {
+        System.out.print("Enter Book ID to Return: ");
+        int id = sc.nextInt();
+
+        for (int i = 0; i < count; i++) {
+            if (books[i].id == id) {
+                if (books[i].issued) {
+                    books[i].issued = false;
+                    System.out.println("Book Returned Successfully!");
+                } else {
+                    System.out.println("Book Was Not Issued.");
+                }
+                return;
+            }
+        }
+
+        System.out.println("Book Not Found.");
+    }
+
+    static void viewBooks() {
+        System.out.println("\n===== BOOK LIST =====");
+        for (int i = 0; i < count; i++) {
+            System.out.println("ID: " + books[i].id +
+                    " | Name: " + books[i].name +
+                    " | Status: " + (books[i].issued ? "Issued" : "Available"));
+        }
+    }
+
+    static void saveBooks() {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+
+            for (int i = 0; i < count; i++) {
+                bw.write(books[i].id + "," + books[i].name + "," + books[i].issued);
+                bw.newLine();
+            }
+
+            bw.close();
+        } catch (Exception e) {
+            System.out.println("Error Saving File.");
+        }
+    }
+
+    static void loadBooks() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                int id = Integer.parseInt(data[0]);
+                String name = data[1];
+                boolean issued = Boolean.parseBoolean(data[2]);
+
+                books[count] = new Book(id, name, issued);
+                count++;
+            }
+
+            br.close();
+        } catch (Exception e) {
+            System.out.println("No Previous Data Found.");
+        }
+    }
+}
