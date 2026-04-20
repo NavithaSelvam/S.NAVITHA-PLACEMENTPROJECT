@@ -1,0 +1,84 @@
+import java.util.Scanner;
+
+class RailwayReservationSystem {
+    static Scanner sc = new Scanner(System.in);
+
+    static int totalSeats = 10;
+    static String[] seats = new String[totalSeats];
+
+    public static void main(String[] args) {
+        int choice;
+
+        do {
+            System.out.println("\n===== RAILWAY RESERVATION SYSTEM =====");
+            System.out.println("1. Book Ticket");
+            System.out.println("2. Cancel Ticket");
+            System.out.println("3. View Seats");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    bookTicket();
+                    break;
+                case 2:
+                    cancelTicket();
+                    break;
+                case 3:
+                    viewSeats();
+                    break;
+                case 4:
+                    System.out.println("Thank You for using Railway Reservation System!");
+                    break;
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+
+        } while (choice != 4);
+    }
+
+    static void bookTicket() {
+        System.out.print("Enter Passenger Name: ");
+        String name = sc.nextLine();
+
+        for (int i = 0; i < totalSeats; i++) {
+            if (seats[i] == null) {
+                seats[i] = name;
+                System.out.println("Ticket Booked Successfully!");
+                System.out.println("Seat Number: " + (i + 1));
+                return;
+            }
+        }
+
+        System.out.println("Sorry! No seats available.");
+    }
+
+    static void cancelTicket() {
+        System.out.print("Enter Seat Number to Cancel: ");
+        int seatNo = sc.nextInt();
+
+        if (seatNo >= 1 && seatNo <= totalSeats) {
+            if (seats[seatNo - 1] != null) {
+                System.out.println("Ticket Cancelled for " + seats[seatNo - 1]);
+                seats[seatNo - 1] = null;
+            } else {
+                System.out.println("Seat is already empty.");
+            }
+        } else {
+            System.out.println("Invalid Seat Number.");
+        }
+    }
+
+    static void viewSeats() {
+        System.out.println("\n===== SEAT STATUS =====");
+        for (int i = 0; i < totalSeats; i++) {
+            if (seats[i] == null) {
+                System.out.println("Seat " + (i + 1) + " : Available");
+            } else {
+                System.out.println("Seat " + (i + 1) + " : Booked by " + seats[i]);
+            }
+        }
+    }
+}
