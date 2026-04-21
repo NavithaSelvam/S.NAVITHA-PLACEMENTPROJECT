@@ -1,0 +1,76 @@
+import java.util.*;
+
+public class Main {
+    static Scanner sc = new Scanner(System.in);
+    static String[] users = new String[10];
+    static int[][] graph = new int[10][10];
+    static int count = 0;
+
+    public static void main(String[] args) {
+        int ch;
+
+        do {
+            System.out.println("\n--- SOCIAL NETWORK ---");
+            System.out.println("1. Add User");
+            System.out.println("2. Add Friendship");
+            System.out.println("3. Suggest Friends");
+            System.out.println("4. View Users");
+            System.out.println("5. Exit");
+            System.out.print("Enter Choice: ");
+            ch = sc.nextInt();
+            sc.nextLine();
+
+            switch(ch) {
+                case 1: addUser(); break;
+                case 2: addFriend(); break;
+                case 3: suggest(); break;
+                case 4: view(); break;
+                case 5: System.out.println("Thank You!"); break;
+                default: System.out.println("Invalid Choice");
+            }
+
+        } while(ch != 5);
+    }
+
+    static void addUser() {
+        System.out.print("Enter User Name: ");
+        users[count] = sc.nextLine();
+        count++;
+        System.out.println("User Added!");
+    }
+
+    static void addFriend() {
+        System.out.print("Enter First User Index: ");
+        int a = sc.nextInt();
+
+        System.out.print("Enter Second User Index: ");
+        int b = sc.nextInt();
+
+        graph[a][b] = 1;
+        graph[b][a] = 1;
+
+        System.out.println("Friendship Added!");
+    }
+
+    static void suggest() {
+        System.out.print("Enter User Index: ");
+        int u = sc.nextInt();
+
+        System.out.println("Friend Suggestions:");
+        for(int i=0;i<count;i++) {
+            if(graph[u][i] == 1) {
+                for(int j=0;j<count;j++) {
+                    if(graph[i][j] == 1 && graph[u][j] == 0 && u != j) {
+                        System.out.println(users[j]);
+                    }
+                }
+            }
+        }
+    }
+
+    static void view() {
+        for(int i=0;i<count;i++) {
+            System.out.println(i + " : " + users[i]);
+        }
+    }
+}
