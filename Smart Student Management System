@@ -1,0 +1,107 @@
+import java.util.*;
+
+class Student {
+    int id;
+    String name;
+    int marks;
+
+    Student(int id, String name, int marks) {
+        this.id = id;
+        this.name = name;
+        this.marks = marks;
+    }
+}
+
+public class SmartStudentManagement {
+    static Scanner sc = new Scanner(System.in);
+    static Student[] s = new Student[100];
+    static int count = 0;
+
+    public static void main(String[] args) {
+        int ch;
+
+        do {
+            System.out.println("\n--- SMART STUDENT MANAGEMENT ---");
+            System.out.println("1.Insert Student");
+            System.out.println("2.Delete Student");
+            System.out.println("3.Search by ID");
+            System.out.println("4.Sort by Marks");
+            System.out.println("5.View Students");
+            System.out.println("6.Exit");
+            System.out.print("Enter Choice: ");
+            ch = sc.nextInt();
+
+            switch(ch) {
+                case 1: insert(); break;
+                case 2: delete(); break;
+                case 3: search(); break;
+                case 4: sort(); break;
+                case 5: view(); break;
+            }
+
+        } while(ch != 6);
+    }
+
+    static void insert() {
+        System.out.print("Enter ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Marks: ");
+        int marks = sc.nextInt();
+
+        s[count++] = new Student(id, name, marks);
+        System.out.println("Student Added!");
+    }
+
+    static void delete() {
+        System.out.print("Enter ID to Delete: ");
+        int id = sc.nextInt();
+
+        for(int i=0;i<count;i++) {
+            if(s[i].id == id) {
+                for(int j=i;j<count-1;j++)
+                    s[j] = s[j+1];
+                count--;
+                System.out.println("Deleted!");
+                return;
+            }
+        }
+        System.out.println("Not Found!");
+    }
+
+    static void search() {
+        System.out.print("Enter ID: ");
+        int id = sc.nextInt();
+
+        for(int i=0;i<count;i++) {
+            if(s[i].id == id) {
+                System.out.println("ID: "+s[i].id+" Name: "+s[i].name+" Marks: "+s[i].marks);
+                return;
+            }
+        }
+        System.out.println("Not Found!");
+    }
+
+    static void sort() {
+        for(int i=0;i<count-1;i++) {
+            for(int j=i+1;j<count;j++) {
+                if(s[i].marks < s[j].marks) {
+                    Student temp = s[i];
+                    s[i] = s[j];
+                    s[j] = temp;
+                }
+            }
+        }
+        System.out.println("Sorted by Marks!");
+    }
+
+    static void view() {
+        for(int i=0;i<count;i++) {
+            System.out.println(s[i].id+" "+s[i].name+" "+s[i].marks);
+        }
+    }
+}
