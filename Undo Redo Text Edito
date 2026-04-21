@@ -1,0 +1,79 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {
+    static Scanner sc = new Scanner(System.in);
+    static Stack<String> undo = new Stack<>();
+    static Stack<String> redo = new Stack<>();
+    static String text = "";
+
+    public static void main(String[] args) {
+        int ch;
+
+        do {
+            System.out.println("\n--- TEXT EDITOR ---");
+            System.out.println("1. Type Text");
+            System.out.println("2. Undo");
+            System.out.println("3. Redo");
+            System.out.println("4. Save File");
+            System.out.println("5. View Text");
+            System.out.println("6. Exit");
+            System.out.print("Enter Choice: ");
+            ch = sc.nextInt();
+            sc.nextLine();
+
+            switch(ch) {
+                case 1: type(); break;
+                case 2: undo(); break;
+                case 3: redo(); break;
+                case 4: save(); break;
+                case 5: view(); break;
+                case 6: System.out.println("Thank You!"); break;
+                default: System.out.println("Invalid Choice");
+            }
+
+        } while(ch != 6);
+    }
+
+    static void type() {
+        undo.push(text);
+        System.out.print("Enter Text: ");
+        text = sc.nextLine();
+        redo.clear();
+    }
+
+    static void undo() {
+        if(!undo.empty()) {
+            redo.push(text);
+            text = undo.pop();
+            System.out.println("Undo Done!");
+        } else {
+            System.out.println("Nothing to Undo");
+        }
+    }
+
+    static void redo() {
+        if(!redo.empty()) {
+            undo.push(text);
+            text = redo.pop();
+            System.out.println("Redo Done!");
+        } else {
+            System.out.println("Nothing to Redo");
+        }
+    }
+
+    static void save() {
+        try {
+            FileWriter fw = new FileWriter("text.txt");
+            fw.write(text);
+            fw.close();
+            System.out.println("Saved to text.txt");
+        } catch(Exception e) {
+            System.out.println("Error Saving File");
+        }
+    }
+
+    static void view() {
+        System.out.println("Current Text: " + text);
+    }
+}
